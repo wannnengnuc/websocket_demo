@@ -1,5 +1,6 @@
 This is a websocket demo
 gcc -o client client_main.c
 gcc -o server server_main.c
+run:
 ./server
 ./client
