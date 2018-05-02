@@ -1,6 +1,6 @@
 #include "websocket_common.h"
 
-char ip[] = "127.0.0.1";//"192.168.244.128";   // 服务器IP
+char ip[] = "127.0.0.1";// 服务器IP
 int port = 9999;        // 服务器端口
 
 int main(void)
@@ -18,7 +18,7 @@ int main(void)
     //
     sleep(1);
     //
-    ret = webSocket_send(fd, "Hello !", strlen("Hello !"), true, WCT_TXTDATA);
+    ret = webSocket_send(fd, "Hello!", strlen("Hello!"), true, WCT_TXTDATA);
     //
     printf("\r\n\r\n========== client start ! ==========\r\n\r\n");
     //
@@ -56,7 +56,7 @@ int main(void)
         delayms(10);
         timeCount += 10;
         //
-        if(timeCount >= 4000)   ///////////////////////////////////////  每4s 客户端可以在这里定时骚扰一下服务器
+        if(timeCount >= 4000)   ///////////////////////////////////////每4s客户端可以在这里定时骚扰一下服务器
         {
             timeCount = 0;
             ret = webSocket_send(fd, "#%^#@@@DTG%^&&+_)+(*^%!HHI", strlen("#%^#@@@DTG%^&&+_)+(*^%!HHI"), true, WCT_TXTDATA);
