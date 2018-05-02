@@ -1,6 +1,6 @@
 #include "websocket_common.h"
 
-char ip[] = "127.0.0.1";//"192.168.244.128";   // 服务器IP
+char ip[] = "127.0.0.1";// 服务器IP
 int port = 9999;        // 服务器端口
 
 int main(void)
@@ -18,7 +18,7 @@ int main(void)
     //
     sleep(1);
     //
-    ret = webSocket_send(fd, "Hello !", strlen("Hello !"), true, WCT_TXTDATA);
+    ret = webSocket_send(fd, "Hello!", strlen("Hello!"), true, WCT_TXTDATA);
     //
     printf("\r\n\r\n========== client start ! ==========\r\n\r\n");
     //
