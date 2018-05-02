@@ -56,7 +56,7 @@ int main(void)
         delayms(10);
         timeCount += 10;
         //
-        if(timeCount >= 4000)   ///////////////////////////////////////  每4s 客户端可以在这里定时骚扰一下服务器
+        if(timeCount >= 4000)   //每4s客户端可以在这里定时骚扰一下服务器
         {
             timeCount = 0;
             ret = webSocket_send(fd, "#%^#@@@DTG%^&&+_)+(*^%!HHI", strlen("#%^#@@@DTG%^&&+_)+(*^%!HHI"), true, WCT_TXTDATA);

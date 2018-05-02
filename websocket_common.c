@@ -2,271 +2,271 @@
 
 //================================================== 加密方法 sha1哈希 ==================================================
 
-typedef struct SHA1Context{  
-    unsigned Message_Digest[5];        
-    unsigned Length_Low;               
-    unsigned Length_High;              
-    unsigned char Message_Block[64];   
-    int Message_Block_Index;           
-    int Computed;                      
-    int Corrupted;                     
-} SHA1Context;  
+typedef struct SHA1Context{
+    unsigned Message_Digest[5];
+    unsigned Length_Low;
+    unsigned Length_High;
+    unsigned char Message_Block[64];
+    int Message_Block_Index;
+    int Computed;
+    int Corrupted;
+} SHA1Context;
 
-#define SHA1CircularShift(bits,word) ((((word) << (bits)) & 0xFFFFFFFF) | ((word) >> (32-(bits))))  
+#define SHA1CircularShift(bits,word) ((((word) << (bits)) & 0xFFFFFFFF) | ((word) >> (32-(bits))))
 
 void SHA1ProcessMessageBlock(SHA1Context *context)
-{  
-    const unsigned K[] = {0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6 };  
-    int         t;                  
-    unsigned    temp;               
-    unsigned    W[80];              
-    unsigned    A, B, C, D, E;      
+{
+    const unsigned K[] = {0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6 };
+    int         t;
+    unsigned    temp;
+    unsigned    W[80];
+    unsigned    A, B, C, D, E;
 
-    for(t = 0; t < 16; t++) 
-    {  
-        W[t] = ((unsigned) context->Message_Block[t * 4]) << 24;  
-        W[t] |= ((unsigned) context->Message_Block[t * 4 + 1]) << 16;  
-        W[t] |= ((unsigned) context->Message_Block[t * 4 + 2]) << 8;  
-        W[t] |= ((unsigned) context->Message_Block[t * 4 + 3]);  
-    }  
+    for(t = 0; t < 16; t++)
+    {
+        W[t] = ((unsigned) context->Message_Block[t * 4]) << 24;
+        W[t] |= ((unsigned) context->Message_Block[t * 4 + 1]) << 16;
+        W[t] |= ((unsigned) context->Message_Block[t * 4 + 2]) << 8;
+        W[t] |= ((unsigned) context->Message_Block[t * 4 + 3]);
+    }
 
-    for(t = 16; t < 80; t++)  
-        W[t] = SHA1CircularShift(1,W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16]);  
+    for(t = 16; t < 80; t++)
+        W[t] = SHA1CircularShift(1,W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16]);
 
-    A = context->Message_Digest[0];  
-    B = context->Message_Digest[1];  
-    C = context->Message_Digest[2];  
-    D = context->Message_Digest[3];  
-    E = context->Message_Digest[4];  
+    A = context->Message_Digest[0];
+    B = context->Message_Digest[1];
+    C = context->Message_Digest[2];
+    D = context->Message_Digest[3];
+    E = context->Message_Digest[4];
 
-    for(t = 0; t < 20; t++) 
-    {  
-        temp =  SHA1CircularShift(5,A) + ((B & C) | ((~B) & D)) + E + W[t] + K[0];  
-        temp &= 0xFFFFFFFF;  
-        E = D;  
-        D = C;  
-        C = SHA1CircularShift(30,B);  
-        B = A;  
-        A = temp;  
-    }  
-    for(t = 20; t < 40; t++) 
-    {  
-        temp = SHA1CircularShift(5,A) + (B ^ C ^ D) + E + W[t] + K[1];  
-        temp &= 0xFFFFFFFF;  
-        E = D;  
-        D = C;  
-        C = SHA1CircularShift(30,B);  
-        B = A;  
-        A = temp;  
-    }  
-    for(t = 40; t < 60; t++) 
-    {  
-        temp = SHA1CircularShift(5,A) + ((B & C) | (B & D) | (C & D)) + E + W[t] + K[2];  
-        temp &= 0xFFFFFFFF;  
-        E = D;  
-        D = C;  
-        C = SHA1CircularShift(30,B);  
-        B = A;  
-        A = temp;  
-    }  
-    for(t = 60; t < 80; t++) 
-    {  
-        temp = SHA1CircularShift(5,A) + (B ^ C ^ D) + E + W[t] + K[3];  
-        temp &= 0xFFFFFFFF;  
-        E = D;  
-        D = C;  
-        C = SHA1CircularShift(30,B);  
-        B = A;  
-        A = temp;  
-    }  
-    context->Message_Digest[0] = (context->Message_Digest[0] + A) & 0xFFFFFFFF;  
-    context->Message_Digest[1] = (context->Message_Digest[1] + B) & 0xFFFFFFFF;  
-    context->Message_Digest[2] = (context->Message_Digest[2] + C) & 0xFFFFFFFF;  
-    context->Message_Digest[3] = (context->Message_Digest[3] + D) & 0xFFFFFFFF;  
-    context->Message_Digest[4] = (context->Message_Digest[4] + E) & 0xFFFFFFFF;  
-    context->Message_Block_Index = 0;  
-} 
+    for(t = 0; t < 20; t++)
+    {
+        temp =  SHA1CircularShift(5,A) + ((B & C) | ((~B) & D)) + E + W[t] + K[0];
+        temp &= 0xFFFFFFFF;
+        E = D;
+        D = C;
+        C = SHA1CircularShift(30,B);
+        B = A;
+        A = temp;
+    }
+    for(t = 20; t < 40; t++)
+    {
+        temp = SHA1CircularShift(5,A) + (B ^ C ^ D) + E + W[t] + K[1];
+        temp &= 0xFFFFFFFF;
+        E = D;
+        D = C;
+        C = SHA1CircularShift(30,B);
+        B = A;
+        A = temp;
+    }
+    for(t = 40; t < 60; t++)
+    {
+        temp = SHA1CircularShift(5,A) + ((B & C) | (B & D) | (C & D)) + E + W[t] + K[2];
+        temp &= 0xFFFFFFFF;
+        E = D;
+        D = C;
+        C = SHA1CircularShift(30,B);
+        B = A;
+        A = temp;
+    }
+    for(t = 60; t < 80; t++)
+    {
+        temp = SHA1CircularShift(5,A) + (B ^ C ^ D) + E + W[t] + K[3];
+        temp &= 0xFFFFFFFF;
+        E = D;
+        D = C;
+        C = SHA1CircularShift(30,B);
+        B = A;
+        A = temp;
+    }
+    context->Message_Digest[0] = (context->Message_Digest[0] + A) & 0xFFFFFFFF;
+    context->Message_Digest[1] = (context->Message_Digest[1] + B) & 0xFFFFFFFF;
+    context->Message_Digest[2] = (context->Message_Digest[2] + C) & 0xFFFFFFFF;
+    context->Message_Digest[3] = (context->Message_Digest[3] + D) & 0xFFFFFFFF;
+    context->Message_Digest[4] = (context->Message_Digest[4] + E) & 0xFFFFFFFF;
+    context->Message_Block_Index = 0;
+}
 
 void SHA1Reset(SHA1Context *context)
 {
-    context->Length_Low             = 0;  
-    context->Length_High            = 0;  
-    context->Message_Block_Index    = 0;  
+    context->Length_Low             = 0;
+    context->Length_High            = 0;
+    context->Message_Block_Index    = 0;
 
-    context->Message_Digest[0]      = 0x67452301;  
-    context->Message_Digest[1]      = 0xEFCDAB89;  
-    context->Message_Digest[2]      = 0x98BADCFE;  
-    context->Message_Digest[3]      = 0x10325476;  
-    context->Message_Digest[4]      = 0xC3D2E1F0;  
+    context->Message_Digest[0]      = 0x67452301;
+    context->Message_Digest[1]      = 0xEFCDAB89;
+    context->Message_Digest[2]      = 0x98BADCFE;
+    context->Message_Digest[3]      = 0x10325476;
+    context->Message_Digest[4]      = 0xC3D2E1F0;
 
-    context->Computed   = 0;  
-    context->Corrupted  = 0;  
-}  
+    context->Computed   = 0;
+    context->Corrupted  = 0;
+}
 
 void SHA1PadMessage(SHA1Context *context)
-{  
-    if (context->Message_Block_Index > 55) 
-    {  
-        context->Message_Block[context->Message_Block_Index++] = 0x80;  
-        while(context->Message_Block_Index < 64)  context->Message_Block[context->Message_Block_Index++] = 0;  
-        SHA1ProcessMessageBlock(context);  
-        while(context->Message_Block_Index < 56) context->Message_Block[context->Message_Block_Index++] = 0;  
-    } 
-    else 
-    {  
-        context->Message_Block[context->Message_Block_Index++] = 0x80;  
-        while(context->Message_Block_Index < 56) context->Message_Block[context->Message_Block_Index++] = 0;  
-    }  
-    context->Message_Block[56] = (context->Length_High >> 24 ) & 0xFF;  
-    context->Message_Block[57] = (context->Length_High >> 16 ) & 0xFF;  
-    context->Message_Block[58] = (context->Length_High >> 8 ) & 0xFF;  
-    context->Message_Block[59] = (context->Length_High) & 0xFF;  
-    context->Message_Block[60] = (context->Length_Low >> 24 ) & 0xFF;  
-    context->Message_Block[61] = (context->Length_Low >> 16 ) & 0xFF;  
-    context->Message_Block[62] = (context->Length_Low >> 8 ) & 0xFF;  
-    context->Message_Block[63] = (context->Length_Low) & 0xFF;  
+{
+    if (context->Message_Block_Index > 55)
+    {
+        context->Message_Block[context->Message_Block_Index++] = 0x80;
+        while(context->Message_Block_Index < 64)  context->Message_Block[context->Message_Block_Index++] = 0;
+        SHA1ProcessMessageBlock(context);
+        while(context->Message_Block_Index < 56) context->Message_Block[context->Message_Block_Index++] = 0;
+    }
+    else
+    {
+        context->Message_Block[context->Message_Block_Index++] = 0x80;
+        while(context->Message_Block_Index < 56) context->Message_Block[context->Message_Block_Index++] = 0;
+    }
+    context->Message_Block[56] = (context->Length_High >> 24 ) & 0xFF;
+    context->Message_Block[57] = (context->Length_High >> 16 ) & 0xFF;
+    context->Message_Block[58] = (context->Length_High >> 8 ) & 0xFF;
+    context->Message_Block[59] = (context->Length_High) & 0xFF;
+    context->Message_Block[60] = (context->Length_Low >> 24 ) & 0xFF;
+    context->Message_Block[61] = (context->Length_Low >> 16 ) & 0xFF;
+    context->Message_Block[62] = (context->Length_Low >> 8 ) & 0xFF;
+    context->Message_Block[63] = (context->Length_Low) & 0xFF;
 
-    SHA1ProcessMessageBlock(context);  
-} 
+    SHA1ProcessMessageBlock(context);
+}
 
 int SHA1Result(SHA1Context *context)
 {
-    if (context->Corrupted) 
-    {  
-        return 0;  
-    }  
-    if (!context->Computed) 
-    {  
-        SHA1PadMessage(context);  
-        context->Computed = 1;  
-    }  
-    return 1;  
-}  
+    if (context->Corrupted)
+    {
+        return 0;
+    }
+    if (!context->Computed)
+    {
+        SHA1PadMessage(context);
+        context->Computed = 1;
+    }
+    return 1;
+}
 
 
-void SHA1Input(SHA1Context *context,const char *message_array,unsigned length){  
-    if (!length) 
-        return;  
+void SHA1Input(SHA1Context *context,const char *message_array,unsigned length){
+    if (!length)
+        return;
 
     if (context->Computed || context->Corrupted)
-    {  
-        context->Corrupted = 1;  
-        return;  
-    }  
+    {
+        context->Corrupted = 1;
+        return;
+    }
 
     while(length-- && !context->Corrupted)
-    {  
-        context->Message_Block[context->Message_Block_Index++] = (*message_array & 0xFF);  
+    {
+        context->Message_Block[context->Message_Block_Index++] = (*message_array & 0xFF);
 
-        context->Length_Low += 8;  
+        context->Length_Low += 8;
 
-        context->Length_Low &= 0xFFFFFFFF;  
+        context->Length_Low &= 0xFFFFFFFF;
         if (context->Length_Low == 0)
-        {  
-            context->Length_High++;  
-            context->Length_High &= 0xFFFFFFFF;  
-            if (context->Length_High == 0) context->Corrupted = 1;  
-        }  
+        {
+            context->Length_High++;
+            context->Length_High &= 0xFFFFFFFF;
+            if (context->Length_High == 0) context->Corrupted = 1;
+        }
 
         if (context->Message_Block_Index == 64)
-        {  
-            SHA1ProcessMessageBlock(context);  
-        }  
-        message_array++;  
-    }  
+        {
+            SHA1ProcessMessageBlock(context);
+        }
+        message_array++;
+    }
 }
 
-/* 
-int sha1_hash(const char *source, char *lrvar){// Main 
-    SHA1Context sha; 
-    char buf[128]; 
+/*
+int sha1_hash(const char *source, char *lrvar){// Main
+    SHA1Context sha;
+    char buf[128];
 
-    SHA1Reset(&sha); 
-    SHA1Input(&sha, source, strlen(source)); 
+    SHA1Reset(&sha);
+    SHA1Input(&sha, source, strlen(source));
 
-    if (!SHA1Result(&sha)){ 
-        printf("SHA1 ERROR: Could not compute message digest"); 
-        return -1; 
-    } else { 
-        memset(buf,0,sizeof(buf)); 
-        sprintf(buf, "%08X%08X%08X%08X%08X", sha.Message_Digest[0],sha.Message_Digest[1], 
-        sha.Message_Digest[2],sha.Message_Digest[3],sha.Message_Digest[4]); 
-        //lr_save_string(buf, lrvar); 
+    if (!SHA1Result(&sha)){
+        printf("SHA1 ERROR: Could not compute message digest");
+        return -1;
+    } else {
+        memset(buf,0,sizeof(buf));
+        sprintf(buf, "%08X%08X%08X%08X%08X", sha.Message_Digest[0],sha.Message_Digest[1],
+        sha.Message_Digest[2],sha.Message_Digest[3],sha.Message_Digest[4]);
+        //lr_save_string(buf, lrvar);
 
-        return strlen(buf); 
-    } 
-} 
-*/  
-char * sha1_hash(const char *source){   // Main  
-    SHA1Context sha;  
-    char *buf;//[128];  
+        return strlen(buf);
+    }
+}
+*/
+char * sha1_hash(const char *source){   // Main
+    SHA1Context sha;
+    char *buf;//[128];
 
-    SHA1Reset(&sha);  
-    SHA1Input(&sha, source, strlen(source));  
+    SHA1Reset(&sha);
+    SHA1Input(&sha, source, strlen(source));
 
     if (!SHA1Result(&sha))
-    {  
-        printf("SHA1 ERROR: Could not compute message digest");  
-        return NULL;  
-    } 
-    else 
-    {  
-        buf = (char *)malloc(128);  
-        memset(buf, 0, 128);  
-        sprintf(buf, "%08X%08X%08X%08X%08X", sha.Message_Digest[0],sha.Message_Digest[1],  
-        sha.Message_Digest[2],sha.Message_Digest[3],sha.Message_Digest[4]);  
-        //lr_save_string(buf, lrvar);  
+    {
+        printf("SHA1 ERROR: Could not compute message digest");
+        return NULL;
+    }
+    else
+    {
+        buf = (char *)malloc(128);
+        memset(buf, 0, 128);
+        sprintf(buf, "%08X%08X%08X%08X%08X", sha.Message_Digest[0],sha.Message_Digest[1],
+        sha.Message_Digest[2],sha.Message_Digest[3],sha.Message_Digest[4]);
+        //lr_save_string(buf, lrvar);
 
-        //return strlen(buf);  
-        return buf;  
-    }  
-}  
-
-int tolower(int c)   
-{   
-    if (c >= 'A' && c <= 'Z')   
-    {   
-        return c + 'a' - 'A';   
-    }   
-    else   
-    {   
-        return c;   
-    }   
+        //return strlen(buf);
+        return buf;
+    }
 }
 
-int htoi(const char s[], int start, int len)   
-{   
-    int i, j;   
-    int n = 0;   
-    if (s[0] == '0' && (s[1]=='x' || s[1]=='X')) //判断是否有前导0x或者0X  
-    {   
-        i = 2;   
-    }   
-    else   
-    {   
-        i = 0;   
-    }   
-    i+=start;  
-    j=0;  
-    for (; (s[i] >= '0' && s[i] <= '9')   
-       || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >='A' && s[i] <= 'F');++i)   
-    {     
-        if(j>=len)  
-        {  
-            break;  
-        }  
-        if (tolower(s[i]) > '9')   
-        {   
-            n = 16 * n + (10 + tolower(s[i]) - 'a');   
-        }   
-        else   
-        {   
-            n = 16 * n + (tolower(s[i]) - '0');   
-        }   
-        j++;  
-    }   
-    return n;   
-}   
+int tolower(int c)
+{
+    if (c >= 'A' && c <= 'Z')
+    {
+        return c + 'a' - 'A';
+    }
+    else
+    {
+        return c;
+    }
+}
+
+int htoi(const char s[], int start, int len)
+{
+    int i, j;
+    int n = 0;
+    if (s[0] == '0' && (s[1]=='x' || s[1]=='X')) //判断是否有前导0x或者0X
+    {
+        i = 2;
+    }
+    else
+    {
+        i = 0;
+    }
+    i+=start;
+    j=0;
+    for (; (s[i] >= '0' && s[i] <= '9')
+       || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >='A' && s[i] <= 'F');++i)
+    {
+        if(j>=len)
+        {
+            break;
+        }
+        if (tolower(s[i]) > '9')
+        {
+            n = 16 * n + (10 + tolower(s[i]) - 'a');
+        }
+        else
+        {
+            n = 16 * n + (tolower(s[i]) - '0');
+        }
+        j++;
+    }
+    return n;
+}
 
 //================================================== 加密方法BASE64 ==================================================
 
@@ -435,30 +435,30 @@ int webSocket_buildShakeKey(unsigned char *key)
  ******************************************************************************/
 int webSocket_buildRespondShakeKey(unsigned char *acceptKey, unsigned int acceptKeyLen, unsigned char *respondKey)
 {
-    char *clientKey;  
-    char *sha1DataTemp;  
-    char *sha1Data;  
-    int i, n;  
-    const char GUID[] = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";  
+    char *clientKey;
+    char *sha1DataTemp;
+    char *sha1Data;
+    int i, n;
+    const char GUID[] = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     unsigned int GUIDLEN;
 
-    if(acceptKey == NULL)  
-        return 0;  
+    if(acceptKey == NULL)
+        return 0;
     GUIDLEN = sizeof(GUID);
-    clientKey = (char *)calloc(1, sizeof(char)*(acceptKeyLen + GUIDLEN + 10));  
+    clientKey = (char *)calloc(1, sizeof(char)*(acceptKeyLen + GUIDLEN + 10));
     memset(clientKey, 0, (acceptKeyLen + GUIDLEN + 10));
     //
-    memcpy(clientKey, acceptKey, acceptKeyLen); 
+    memcpy(clientKey, acceptKey, acceptKeyLen);
     memcpy(&clientKey[acceptKeyLen], GUID, GUIDLEN);
     clientKey[acceptKeyLen + GUIDLEN] = '\0';
     //
-    sha1DataTemp = sha1_hash(clientKey);  
-    n = strlen(sha1DataTemp);  
-    sha1Data = (char *)calloc(1, n / 2 + 1);  
-    memset(sha1Data, 0, n / 2 + 1);  
+    sha1DataTemp = sha1_hash(clientKey);
+    n = strlen(sha1DataTemp);
+    sha1Data = (char *)calloc(1, n / 2 + 1);
+    memset(sha1Data, 0, n / 2 + 1);
    //
-    for(i = 0; i < n; i += 2)  
-        sha1Data[ i / 2 ] = htoi(sha1DataTemp, i, 2);      
+    for(i = 0; i < n; i += 2)
+        sha1Data[ i / 2 ] = htoi(sha1DataTemp, i, 2);
     n = base64_encode((const unsigned char *)sha1Data, (char *)respondKey, (n / 2));
     //
     free(sha1DataTemp);
@@ -539,7 +539,7 @@ void webSocket_buildHttpRespond(unsigned char *acceptKey, unsigned int acceptKey
     char timeStr[256] = {0};
     unsigned char respondShakeKey[256] = {0};
     // 构建回应的握手key
-    webSocket_buildRespondShakeKey(acceptKey, acceptKeyLen, respondShakeKey);   
+    webSocket_buildRespondShakeKey(acceptKey, acceptKeyLen, respondShakeKey);
     // 构建回应时间字符串
     time(&now);
     tm_now = localtime(&now);
@@ -556,7 +556,7 @@ void webSocket_buildHttpRespond(unsigned char *acceptKey, unsigned int acceptKey
  *        packageMaxLen : 存储地址可用长度
  *          isMask : 是否使用掩码     1要   0 不要
  *          type : 数据类型, 由打包后第一个字节决定, 这里默认是数据传输, 即0x81
- * 返回: 打包后的长度(会比原数据长2~16个字节不等)      <=0 打包失败 
+ * 返回: 打包后的长度(会比原数据长2~16个字节不等)      <=0 打包失败
  * 说明: 无
  ******************************************************************************/
 int webSocket_enPackage(unsigned char *data, unsigned int dataLen, unsigned char *package, unsigned int packageMaxLen, bool isMask, Websocket_CommunicationType type)
@@ -676,20 +676,20 @@ int webSocket_dePackage(unsigned char *data, unsigned int dataLen, unsigned char
 
     if((data[0]&0x80) == 0x80)
     {
-        if(type == 0x01) 
+        if(type == 0x01)
             ret = WCT_TXTDATA;
-        else if(type == 0x02) 
+        else if(type == 0x02)
             ret = WCT_BINDATA;
-        else if(type == 0x08) 
+        else if(type == 0x08)
             ret = WCT_DISCONN;
-        else if(type == 0x09) 
+        else if(type == 0x09)
             ret = WCT_PING;
-        else if(type == 0x0A) 
+        else if(type == 0x0A)
             ret = WCT_PONG;
-        else 
+        else
             return WCT_ERR;
     }
-    else if(type == 0x00) 
+    else if(type == 0x00)
         ret = WCT_MINDATA;
     else
         return WCT_ERR;
@@ -810,22 +810,22 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
     //int i;
     unsigned char loginBuf[512] = {0}, recBuf[512] = {0}, shakeKey[128] = {0}, *p;
 
-    // zhd服务器端网络地址结构体   
-    struct sockaddr_in report_addr;     
-    memset(&report_addr,0,sizeof(report_addr));             // 数据初始化--清零     
-    report_addr.sin_family = AF_INET;                           // 设置为IP通信     
-    report_addr.sin_addr.s_addr = inet_addr(ip);            // 服务器IP地址     
-    report_addr.sin_port = htons(port);                             // 服务器端口号     
+    // zhd服务器端网络地址结构体
+    struct sockaddr_in report_addr;
+    memset(&report_addr,0,sizeof(report_addr));             // 数据初始化--清零
+    report_addr.sin_family = AF_INET;                           // 设置为IP通信
+    report_addr.sin_addr.s_addr = inet_addr(ip);            // 服务器IP地址
+    report_addr.sin_port = htons(port);                             // 服务器端口号
 
-    //create unix socket  
-    if((fd = socket(AF_INET,SOCK_STREAM, 0)) < 0) 
-    {  
-        printf("webSocket_login : cannot create socket\r\n");  
-        return -1;  
+    //create unix socket
+    if((fd = socket(AF_INET,SOCK_STREAM, 0)) < 0)
+    {
+        printf("webSocket_login : cannot create socket\r\n");
+        return -1;
     }
-    /* 
+    /*
      // 测试 -----  创建握手key 和 匹配返回key
-    webSocket_buildShakeKey(shakeKey); 
+    webSocket_buildShakeKey(shakeKey);
     printf("key1:%s\r\n", shakeKey);
     webSocket_buildRespondShakeKey(shakeKey, strlen(shakeKey), shakeKey);
     printf("key2:%s\r\n", shakeKey);
@@ -840,13 +840,13 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
     {
         if(++timeOut > REPORT_LOGIN_CONNECT_TIMEOUT)
         {
-            printf("webSocket_login : %s:%d cannot connect !  %d\r\n" , ip, port, timeOut);  
+            printf("webSocket_login : %s:%d cannot connect !  %d\r\n" , ip, port, timeOut);
             //
             sprintf(loginBuf, "webSocket_login : %s:%d cannot connect !  %d" , ip, port, timeOut);
-            close(fd); 
-            return -timeOut;  
+            close(fd);
+            return -timeOut;
         }
-        delayms(1);  //1ms 
+        delayms(1);  //1ms
     }
 
     //发送http协议头
@@ -854,11 +854,11 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
     webSocket_buildShakeKey(shakeKey);  // 创建握手key
 
     memset(loginBuf, 0, sizeof(loginBuf));  // 创建协议包
-    webSocket_buildHttpHead(ip, port, interface_path, shakeKey, (char *)loginBuf);   
+    webSocket_buildHttpHead(ip, port, interface_path, shakeKey, (char *)loginBuf);
     // 发出协议包
-    ret = send(fd , loginBuf , strlen((const char*)loginBuf) , MSG_NOSIGNAL);     
+    ret = send(fd , loginBuf , strlen((const char*)loginBuf) , MSG_NOSIGNAL);
     //
-    //printf("\r\nconnect time : %d\r\nsend:\n%s\r\n" , timeOut, loginBuf); 
+    //printf("\r\nconnect time : %d\r\nsend:\n%s\r\n" , timeOut, loginBuf);
 
     while(1)
     {
@@ -868,7 +868,7 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
         {
             if(strncmp((const char *)recBuf, (const char *)"HTTP", strlen((const char *)"HTTP")) == 0)    // 返回的是http回应信息
             {
-                //printf("\r\nlogin_recv : %d / %d\r\n%s\r\n" , ret, timeOut, recBuf); 
+                //printf("\r\nlogin_recv : %d / %d\r\n%s\r\n" , ret, timeOut, recBuf);
                 if((p = (unsigned char *)strstr((const char *)recBuf, (const char *)"Sec-WebSocket-Accept: ")) != NULL)    // 检查握手信号
                 {
                     p += strlen((const char *)"Sec-WebSocket-Accept: ");
@@ -889,8 +889,8 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
             {
                 // 显示数据
                 if(recBuf[0] >= ' ' && recBuf[0] <= '~')
-                { 
-                    printf("\r\nlogin_recv : %d\r\n%s\r\n" , ret, recBuf); 
+                {
+                    printf("\r\nlogin_recv : %d\r\n%s\r\n" , ret, recBuf);
                 }
                 else
                 {
@@ -904,13 +904,13 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
         }
         if(++timeOut > REPORT_LOGIN_RESPOND_TIMEOUT)
         {
-            close(fd); 
+            close(fd);
             return -timeOut;
         }
         delayms(1);  //1ms
     }
     //
-    close(fd); 
+    close(fd);
     return -timeOut;
 }
 /*******************************************************************************
@@ -918,7 +918,7 @@ int webSocket_clientLinkToServer(char *ip, int port, char *interface_path)
  * 功能: 服务器回复客户端的连接请求, 以建立websocket连接
  * 形参: fd：连接句柄
  *          *recvBuf : 接收到来自客户端的数据(内含http连接请求)
- *              bufLen : 
+ *              bufLen :
  * 返回: =0 建立websocket连接成功        <0 建立websocket连接失败
  * 说明: 无
  ******************************************************************************/
@@ -1018,7 +1018,7 @@ int webSocket_recv(int fd, unsigned char *data, unsigned int dataMaxLen)
         {
             webSocket_send(fd, webSocketPackage, retLen, true, WCT_PONG);
             // 显示数据
-            printf("webSocket_recv : PING %d\r\n%s\r\n" , retLen, webSocketPackage); 
+            printf("webSocket_recv : PING %d\r\n%s\r\n" , retLen, webSocketPackage);
             free(recvBuf);
             free(webSocketPackage);
             return WCT_NULL;
@@ -1029,12 +1029,12 @@ int webSocket_recv(int fd, unsigned char *data, unsigned int dataMaxLen)
             /*
             // 显示数据
             if(webSocketPackage[0] >= ' ' && webSocketPackage[0] <= '~')
-            { 
-                printf("\r\nwebSocket_recv : New Package StrFile ret2:%d/retLen:%d\r\n%s\r\n" , ret2, retLen, webSocketPackage); 
+            {
+                printf("\r\nwebSocket_recv : New Package StrFile ret2:%d/retLen:%d\r\n%s\r\n" , ret2, retLen, webSocketPackage);
             }
             else
             {
-                printf("\r\nwebSocket_recv : New Package BinFile ret2:%d/retLen:%d\r\n" , ret2, retLen); 
+                printf("\r\nwebSocket_recv : New Package BinFile ret2:%d/retLen:%d\r\n" , ret2, retLen);
                 for(i = 0; i < retLen; i++) printf("%.2X ", webSocketPackage[i]); printf("\r\n");
             }*/
             free(recvBuf);
@@ -1044,11 +1044,11 @@ int webSocket_recv(int fd, unsigned char *data, unsigned int dataMaxLen)
         else
         {
             // 显示数据
-            if(recvBuf[0] >= ' ' && recvBuf[0] <= '~') 
-                printf("\r\nwebSocket_recv : ret:%d/ret2:%d/retLen:%d\r\n%s\r\n" , ret, ret2, retLen, recvBuf); 
-            else 
+            if(recvBuf[0] >= ' ' && recvBuf[0] <= '~')
+                printf("\r\nwebSocket_recv : ret:%d/ret2:%d/retLen:%d\r\n%s\r\n" , ret, ret2, retLen, recvBuf);
+            else
             {
-                printf("\r\nwebSocket_recv : ret:%d/ret2:%d/retLen:%d\r\n%s\r\n" , ret, ret2, retLen, recvBuf); 
+                printf("\r\nwebSocket_recv : ret:%d/ret2:%d/retLen:%d\r\n%s\r\n" , ret, ret2, retLen, recvBuf);
                 for(i = 0; i < ret; i++) printf("%.2X ", recvBuf[i]); printf("\r\n");
             }
         }*/

@@ -1,18 +1,18 @@
 #ifndef _WEBSOCKET_COMMON_H_
 #define _WEBSOCKET_COMMON_H_
 
-#include <stdio.h>   
-#include <stdlib.h>  
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>     // 使用 malloc, calloc等动态分配内存方法
 #include <stdbool.h>
 #include <time.h>       // 获取系统时间
 
 #include <errno.h>
-#include <netinet/in.h>  
+#include <netinet/in.h>
 #include <fcntl.h>      // socket设置非阻塞模式
-#include <sys/types.h>  
-#include <sys/socket.h>  
-#include <sys/un.h> 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/epoll.h>  // epoll管理服务器的连接和接收触发
 
 #include <pthread.h>    // 使用多线程
@@ -23,10 +23,10 @@ typedef enum{
     WCT_TXTDATA = -19,      // 0x1：标识一个txt类型数据包
     WCT_BINDATA = -18,      // 0x2：标识一个bin类型数据包
     WCT_DISCONN = -17,      // 0x8：标识一个断开连接类型数据包
-    WCT_PING = -16,     // 0x8：标识一个断开连接类型数据包
-    WCT_PONG = -15,     // 0xA：表示一个pong类型数据包
-    WCT_ERR = -1,
-    WCT_NULL = 0
+    WCT_PING    = -16,     // 0x8：标识一个断开连接类型数据包
+    WCT_PONG    = -15,     // 0xA：表示一个pong类型数据包
+    WCT_ERR     = -1,
+    WCT_NULL    = 0
 }Websocket_CommunicationType;
 
 // client向server发送http连接请求, 并处理返回
