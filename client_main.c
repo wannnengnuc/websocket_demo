@@ -1,7 +1,7 @@
 #include "websocket_common.h"
 
-char ip[] = "127.0.0.1";//"192.168.244.128";   // 服务器IP
-int port = 9999;        // 服务器端口
+char ip[] = "192.168.244.128";//"192.168.244.128";   // 服务器IP
+int port = 8008;        // 服务器端口
 
 int main(void)
 {
