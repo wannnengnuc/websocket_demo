@@ -1,6 +1,6 @@
 #include "websocket_common.h"
 
-#define     EPOLL_RESPOND_NUM       100     // epoll同时响应事件数量
+#define     EPOLL_RESPOND_NUM       200     // epoll同时响应事件数量
 
 typedef int (*CallBackFun)(int fd, char *buf, unsigned int bufLen);
 
